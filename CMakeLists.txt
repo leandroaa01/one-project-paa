@@ -28,8 +28,7 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 )
 
 # Create the executable called 'BinPack' using the source files found.
-add_executable(BinPack ${SOURCES}
-                    )
+add_executable(BinPack Main.cpp ${SOURCES})
 
 # Adds the include directories to the 'BinPack' target.
 target_include_directories(BinPack PRIVATE
