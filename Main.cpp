@@ -1,40 +1,75 @@
 #include <iostream>
-#include <vector>
+#include <string>
 
-#include "BinPack.hpp"
+#include "include/BinPack.hpp"
+#include "include/Reader.hpp"
+#include "include/Runner.hpp"
 
 int main()
 {
-    BinPack binPack(10);
-    std::vector<int> items = {3, 4, 2, 7, 1, 5, 6, 8, 2, 4};
+    while (true) {
+        std::cout << "\nMENU PRINCIPAL\n";
+        std::cout << "1. data/binpack1.txt\n";
+        std::cout << "2. data/binpack2.txt\n";
+        std::cout << "0. Sair\n";
+        std::cout << "Escolha o arquivo de testes: ";
 
-    std::cout << "Teste do BinPack\n";
-    std::cout << "Capacidade do bin: " << binPack.getBinCapacity() << "\n\n";
+        int fileOption;
+        std::cin >> fileOption;
 
-    for (int item : items) {
-        binPack.addItem(item);
-        std::cout << "Adicionado item: " << item << "\n";
-    }
-
-    const auto& bins = binPack.getBins();
-    std::cout << "\nQuantidade de bins utilizados: " << binPack.size() << "\n";
-
-    for (std::size_t i = 0; i < bins.size(); ++i) {
-        std::cout << "Bin " << i + 1 << " -> capacidade restante: " << bins[i].capacity
-                  << " | itens: ";
-
-        if (bins[i].list.empty()) {
-            std::cout << "nenhum";
-        } else {
-            for (std::size_t j = 0; j < bins[i].list.size(); ++j) {
-                std::cout << bins[i].list[j];
-                if (j + 1 < bins[i].list.size()) {
-                    std::cout << ", ";
-                }
-            }
+        if (fileOption == 0) {
+            std::cout << "Encerrando o programa...\n";
+            break;
         }
 
-        std::cout << '\n';
+        std::string path;
+        bool invalidOption = false;
+
+        switch (fileOption) {
+            case 1:
+                path = "data/binpack1.txt";
+                break;
+            case 2:
+                path = "data/binpack2.txt";
+                break;
+            default:
+                std::cout << "Opcao invalida!\n";
+                invalidOption = true;
+                break;
+        }
+
+        if (invalidOption) {
+            continue;
+        }
+
+        auto instances = Reader::readInstances(path);
+        if (instances.empty()) {
+            std::cout << "Nenhuma instancia carregada!\n";
+            continue;
+        }
+
+        std::cout << "\nEscolha a solucao a ser usada:\n";
+        std::cout << "1. BinPack (Original)\n";
+        std::cout << "2. Outra solução (Ainda não implementada kkk)\n";
+        std::cout << "0. Voltar\n";
+        std::cout << "Opcao: ";
+
+        int strategyOption;
+        std::cin >> strategyOption;
+
+        switch (strategyOption) {
+            case 0:
+                break;
+            case 1:
+                Runner::runBenchmark<BinPack>(instances, "BinPack (Original)");
+                break;
+            case 2:
+                std::cout << "Ainda não implementada, man\n";
+                break;
+            default:
+                std::cout << "Opcao de solucao invalida!\n";
+                break;
+        }
     }
 
     return 0;
