@@ -1,0 +1,5 @@
+Possiveis combinações de capacidade do bin para a 1° instacia: 
+Maior + Mediana + Menor: 176
+2 * Maior + Mediana: 254
+2 * Maior + Menor: 216
+2 * Mediana + Maior: 214
