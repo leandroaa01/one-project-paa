@@ -22,7 +22,7 @@ public:
             std::cout << "Opcao: ";
 
             int actionOption;
-            std::cin >> actionOption;
+            if (!(std::cin >> actionOption)) return;
 
             if (actionOption == 0) {
                 std::cout << "Retornando ao menu principal...\n";
@@ -39,8 +39,12 @@ public:
             std::cout << "Capacidade do bin: " << binPack.getBinCapacity() << "\n";
             std::cout << "Total de itens a processar: " << inst.items.size() << "\n\n";
 
-            for (int item : inst.items) {
-                binPack.addItem(item);
+            if constexpr (requires { binPack.pack(inst.items); }) {
+                binPack.pack(inst.items);
+            } else {
+                for (int item : inst.items) {
+                    binPack.addItem(item);
+                }
             }
 
             const auto& bins = binPack.getBins();
