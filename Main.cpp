@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "include/BinPack.hpp"
+#include "include/strategies/FirstFit.hpp"
+#include "include/strategies/FirstFitDecreasingRepack.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
 
@@ -15,7 +16,7 @@ int main()
         std::cout << "Escolha o arquivo de testes: ";
 
         int fileOption;
-        std::cin >> fileOption;
+        if (!(std::cin >> fileOption)) break;
 
         if (fileOption == 0) {
             std::cout << "Encerrando o programa...\n";
@@ -49,22 +50,22 @@ int main()
         }
 
         std::cout << "\nEscolha a solucao a ser usada:\n";
-        std::cout << "1. BinPack (Original)\n";
-        std::cout << "2. Outra solução (Ainda não implementada kkk)\n";
+        std::cout << "1. First-Fit\n";
+        std::cout << "2. First-Fit Decreasing com Remanejamento\n";
         std::cout << "0. Voltar\n";
         std::cout << "Opcao: ";
 
         int strategyOption;
-        std::cin >> strategyOption;
+        if (!(std::cin >> strategyOption)) break;
 
         switch (strategyOption) {
             case 0:
                 break;
             case 1:
-                Runner::runBenchmark<BinPack>(instances, "BinPack (Original)");
+                Runner::runBenchmark<FirstFit>(instances, "First-Fit");
                 break;
             case 2:
-                std::cout << "Ainda não implementada, man\n";
+                Runner::runBenchmark<FirstFitDecreasingRepack>(instances, "First-Fit Decreasing + Repack");
                 break;
             default:
                 std::cout << "Opcao de solucao invalida!\n";
