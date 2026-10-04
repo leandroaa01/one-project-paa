@@ -2,6 +2,7 @@
 #include <string>
 
 #include "include/strategies/FirstFit.hpp"
+#include "include/strategies/BestFit.hpp"
 #include "include/strategies/FirstFitDecreasingRepack.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
@@ -52,6 +53,7 @@ int main()
         std::cout << "\nEscolha a solucao a ser usada:\n";
         std::cout << "1. First-Fit\n";
         std::cout << "2. First-Fit Decreasing com Remanejamento\n";
+        std::cout << "3. Best-Fit\n";
         std::cout << "0. Voltar\n";
         std::cout << "Opcao: ";
 
@@ -66,6 +68,9 @@ int main()
                 break;
             case 2:
                 Runner::runBenchmark<FirstFitDecreasingRepack>(instances, "First-Fit Decreasing + Repack");
+                break;
+            case 3:
+                Runner::runBenchmark<BestFit>(instances,"Best-Fit");
                 break;
             default:
                 std::cout << "Opcao de solucao invalida!\n";

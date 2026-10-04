@@ -18,9 +18,7 @@ class FirstFit {
     std::vector<Bin> bins;
     int binCapacity;
 public:
-    FirstFit(int binCapacity) : binCapacity(binCapacity) {
-        bins.push_back(Bin{binCapacity, {}});
-    }
+    FirstFit(int binCapacity) : binCapacity(binCapacity) { }
 
     void addItem(int itemSize) {
         for (auto& bin : bins) {
