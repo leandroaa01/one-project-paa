@@ -8,9 +8,30 @@
 #include "Reader.hpp"
 
 class Runner {
+private:
+    template <typename BinPackType>
+    static void packInstance(BinPackType& binPack, const std::vector<int>& items,
+                             bool useDecreasingRepack) {
+        if constexpr (requires { binPack.packDecreasingRepack(items); }) {
+            if (useDecreasingRepack) {
+                binPack.packDecreasingRepack(items);
+                return;
+            }
+        }
+
+        if constexpr (requires { binPack.pack(items); }) {
+            binPack.pack(items);
+        } else {
+            for (int item : items) {
+                binPack.addItem(item);
+            }
+        }
+    }
+
 public:
     template <typename BinPackType>
-    static void runBenchmark(const std::vector<Instance>& instances, const std::string& strategyName) {
+    static void runBenchmark(const std::vector<Instance>& instances, const std::string& strategyName,
+                             bool useDecreasingRepack = false) {
         for (std::size_t current = 0; current < instances.size(); ++current) {
             const auto& inst = instances[current];
 
@@ -39,13 +60,7 @@ public:
             std::cout << "Capacidade do bin: " << binPack.getBinCapacity() << "\n";
             std::cout << "Total de itens a processar: " << inst.items.size() << "\n\n";
 
-            if constexpr (requires { binPack.pack(inst.items); }) {
-                binPack.pack(inst.items);
-            } else {
-                for (int item : inst.items) {
-                    binPack.addItem(item);
-                }
-            }
+            packInstance(binPack, inst.items, useDecreasingRepack);
 
             const auto& bins = binPack.getBins();
 

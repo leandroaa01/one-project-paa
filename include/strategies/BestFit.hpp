@@ -16,6 +16,9 @@
 
 #pragma once
 
+#include <algorithm>
+#include <functional>
+#include <stdexcept>
 #include <vector>
 #include "Bin.hpp"
 
@@ -71,7 +74,32 @@ public:
                 }
             );
         }
-        realocar();
+    }
+
+    /**
+     * @brief Empacota os itens em ordem decrescente e tenta reduzir
+     * a quantidade de bins usando realocar().
+     *
+     * @param items Itens que serão empacotados.
+     */
+    void packDecreasingRepack(std::vector<int> items) {
+        for (int item : items) {
+            if (item <= 0 || item > binCapacity) {
+                throw std::invalid_argument("Item deve estar entre 1 e a capacidade do bin");
+            }
+        }
+
+        bins.clear();
+        std::sort(items.begin(), items.end(), std::greater<int>());
+
+        for (int item : items) {
+            addItem(item);
+        }
+
+        // realocar() remove no máximo um bin por chamada; repete até
+        // que nenhuma outra realocação consiga eliminar um bin.
+        while (realocar()) {
+        }
     }
 
     /**

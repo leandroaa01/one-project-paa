@@ -54,6 +54,7 @@ int main()
         std::cout << "1. First-Fit\n";
         std::cout << "2. First-Fit Decreasing com Remanejamento\n";
         std::cout << "3. Best-Fit\n";
+        std::cout << "4. Best-Fit Decreasing com Remanejamento\n";
         std::cout << "0. Voltar\n";
         std::cout << "Opcao: ";
 
@@ -71,6 +72,9 @@ int main()
                 break;
             case 3:
                 Runner::runBenchmark<BestFit>(instances,"Best-Fit");
+                break;
+            case 4:
+                Runner::runBenchmark<BestFit>(instances, "Best-Fit Decreasing + Repack", true);
                 break;
             default:
                 std::cout << "Opcao de solucao invalida!\n";
