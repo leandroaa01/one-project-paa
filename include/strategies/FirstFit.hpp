@@ -1,5 +1,5 @@
 /**
- * @file BinPack.hpp
+ * @file FirstFit.hpp
  * @author  Leandro Andrade(leandro.andrade.401@ufrn.edu.br)
  * @author  Daniel Coelho(daniel.coelho.708@ufrn.edu.br)
  * @brief  TODO
@@ -11,23 +11,14 @@
  */
 #pragma once
 #include <vector>
+#include "Bin.hpp"
 
-struct Bin {
-    int capacity;
-    std::vector<int> list;
-    bool isFull() const {
-        return capacity <= 0;
-    }
-};
-
-class BinPack {
+class FirstFit {
     private:
     std::vector<Bin> bins;
     int binCapacity;
 public:
-    BinPack(int binCapacity) : binCapacity(binCapacity) {
-        bins.push_back(Bin{binCapacity, {}});
-    }
+    FirstFit(int binCapacity) : binCapacity(binCapacity) { }
 
     void addItem(int itemSize) {
         for (auto& bin : bins) {
@@ -54,4 +45,3 @@ public:
         return binCapacity;
     }
 };
-

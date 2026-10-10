@@ -1,21 +1,36 @@
 #include <iostream>
 #include <string>
 
-#include "include/BinPack.hpp"
+#include "include/strategies/FirstFit.hpp"
+#include "include/strategies/BestFit.hpp"
+#include "include/strategies/FirstFitDecreasingRepack.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
+
+using raw_str = const char*; //> alias para string constante
+inline raw_str MENU = R"(MENU PRINCIPAL
+  1 - Executar com  data/binpack1.txt
+  2 - Executar com  data/binpack2.txt
+  0 - Sair do programa.
+Escolha o arquivo de teste:  )";
+
+inline raw_str OPC = R"(
+EXECUTAR COM A SOLUCAO:
+ 1. First-Fit
+ 2. First-Fit Decreasing com Remanejamento
+ 3. Best-Fit
+ 4. Best-Fit  Decreasing com Remanejamento
+ 0. Mudar arquivo de teste
+Escolha o Solucao: )";
+
 
 int main()
 {
     while (true) {
-        std::cout << "\nMENU PRINCIPAL\n";
-        std::cout << "1. data/binpack1.txt\n";
-        std::cout << "2. data/binpack2.txt\n";
-        std::cout << "0. Sair\n";
-        std::cout << "Escolha o arquivo de testes: ";
+        std::cout<< MENU;
 
         int fileOption;
-        std::cin >> fileOption;
+        if (!(std::cin >> fileOption)) break;
 
         if (fileOption == 0) {
             std::cout << "Encerrando o programa...\n";
@@ -48,23 +63,25 @@ int main()
             continue;
         }
 
-        std::cout << "\nEscolha a solucao a ser usada:\n";
-        std::cout << "1. BinPack (Original)\n";
-        std::cout << "2. Outra solução (Ainda não implementada kkk)\n";
-        std::cout << "0. Voltar\n";
-        std::cout << "Opcao: ";
+        std::cout << OPC;
 
         int strategyOption;
-        std::cin >> strategyOption;
+        if (!(std::cin >> strategyOption)) break;
 
         switch (strategyOption) {
             case 0:
                 break;
             case 1:
-                Runner::runBenchmark<BinPack>(instances, "BinPack (Original)");
+                Runner::runBenchmark<FirstFit>(instances, "First-Fit");
                 break;
             case 2:
-                std::cout << "Ainda não implementada, man\n";
+                Runner::runBenchmark<FirstFitDecreasingRepack>(instances, "First-Fit Decreasing + Repack");
+                break;
+            case 3:
+                Runner::runBenchmark<BestFit>(instances,"Best-Fit");
+                break;
+            case 4:
+                Runner::runBenchmark<BestFit>(instances, "Best-Fit Decreasing + Repack", true);
                 break;
             default:
                 std::cout << "Opcao de solucao invalida!\n";

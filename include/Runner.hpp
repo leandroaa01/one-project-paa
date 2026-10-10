@@ -11,23 +11,47 @@
 
 #include "Reader.hpp"
 
+using raw_str = const char*; //> alias para string constante
+inline raw_str MENU1 = R"(  1. Executar nesta instancia
+  2. Pular para a proxima instancia
+  0. Voltar ao menu inicial
+ )";
+
 class Runner {
+private:
+    template <typename BinPackType>
+    static void packInstance(BinPackType& binPack, const std::vector<int>& items,
+                             bool useDecreasingRepack) {
+        if constexpr (requires { binPack.packDecreasingRepack(items); }) {
+            if (useDecreasingRepack) {
+                binPack.packDecreasingRepack(items);
+                return;
+            }
+        }
+
+        if constexpr (requires { binPack.pack(items); }) {
+            binPack.pack(items);
+        } else {
+            for (int item : items) {
+                binPack.addItem(item);
+            }
+        }
+    }
+
 public:
     template <typename BinPackType>
-    static void runBenchmark(const std::vector<Instance>& instances, const std::string& strategyName) {
-        for (auto current = 0; current < instances.size(); ++current) {
+    static void runBenchmark(const std::vector<Instance>& instances, const std::string& strategyName,
+                             bool useDecreasingRepack = false) {
+        for (std::size_t current = 0; current < instances.size(); ++current) {
             const auto& inst = instances[current];
 
-            std::cout << "\n----------------------------------------\n";
-            std::cout << "Instancia [" << current + 1 << "/" << instances.size() << "]: " << inst.id << "\n";
-            std::cout << "1. Executar nesta instancia\n";
-            std::cout << "2. Pular para a proxima instancia\n";
-            std::cout << "0. Voltar ao menu inicial\n";
-            std::cout << "3. Estaticas da instancia\n";
+            std::cout << "\n------------------------------------------\n";
+            std::cout << " Instancia [" << current + 1 << "/" << instances.size() << "]: " << inst.id << "\n";
+            std::cout << MENU1;
             std::cout << "Opcao: ";
 
             int actionOption;
-            std::cin >> actionOption;
+            if (!(std::cin >> actionOption)) return;
 
             if (actionOption == 0) {
                 std::cout << "Retornando ao menu principal...\n";
@@ -81,9 +105,7 @@ public:
             std::cout << "Capacidade do bin: " << binPack.getBinCapacity() << "\n";
             std::cout << "Total de itens a processar: " << inst.items.size() << "\n\n";
 
-            for (int item : inst.items) {
-                binPack.addItem(item);
-            }
+            packInstance(binPack, inst.items, useDecreasingRepack);
 
             const auto& bins = binPack.getBins();
 

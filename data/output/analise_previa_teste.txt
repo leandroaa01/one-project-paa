@@ -1,0 +1,172 @@
+Análise dos Resultados
+1. Definição da área
+
+A área total é calculada pela seguinte fórmula:
+
+Área Total = Tamanho × Solução Gerada
+
+
+O tamanho original utilizado nas estratégias First-Fit e First-Fit Decreasing + Repack é 150.
+
+Nas estratégias que utilizam Tamanho Estático, o tamanho passa para 176.
+
+2. Resultados — First-Fit
+Teste	Tamanho	Melhor Solução	Solução Gerada	Área Total
+1	150	48	50	7500
+2	150	49	51	7650
+3	150	46	48	7200
+Média	150	47,67	49,67	7450
+3. Resultados — First-Fit Decreasing + Repack
+Teste	Tamanho	Melhor Solução	Solução Gerada	Área Total
+1	150	48	49	7350
+2	150	49	49	7350
+3	150	46	47	7050
+Média	150	47,67	48,33	7250
+4. Resultados — First-Fit + Tamanho Estático
+Teste	Tamanho	Melhor Solução	Solução Gerada	Área Total
+1	176	48	43	7568
+2	176	49	43	7568
+3	176	46	41	7216
+Média	176	47,67	42,33	7440,67
+5. Resultados — First-Fit Decreasing + Repack + Tamanho Estático
+Teste	Tamanho	Melhor Solução	Solução Gerada	Área Total
+1	176	48	41	7216
+2	176	49	42	7392
+3	176	46	40	7040
+Média	176	47,67	41,00	7216
+6. Comparação Geral
+Estratégia	Tamanho Médio	Solução Gerada Média	Área Total Média
+First-Fit	150	49,67	7450,00
+First-Fit Decreasing + Repack	150	48,33	7250,00
+First-Fit + Tamanho Estático	176	42,33	7440,67
+First-Fit Decreasing + Repack + Tamanho Estático	176	41,00	7216,00
+7. Variação do Tamanho
+
+O tamanho original é 150. Nas estratégias com tamanho estático, o tamanho utilizado é 176.
+
+A variação percentual é:
+
+Variação (%) = ((176 - 150) / 150) × 100
+
+
+Resultado:
+
+Variação = 17,33%
+
+
+Portanto, o tamanho utilizado nas estratégias com tamanho estático apresentou um aumento de 17,33% em relação ao tamanho original.
+
+8. Comparação da Área em Relação ao First-Fit
+
+O First-Fit é utilizado como referência, com área média de 7450.
+
+A variação percentual da área é calculada por:
+
+Variação (%) = ((Área da estratégia - Área do First-Fit) / Área do First-Fit) × 100
+
+Estratégia	Área Média	Diferença de Área	Variação da Área
+First-Fit	7450,00	—	0,00%
+First-Fit Decreasing + Repack	7250,00	-200,00	-2,68%
+First-Fit + Tamanho Estático	7440,67	-9,33	-0,13%
+First-Fit Decreasing + Repack + Tamanho Estático	7216,00	-234,00	-3,14%
+9. Comparação da Área por Teste
+Teste	First-Fit	FF + Repack	Variação	FF + Static	Variação	FF + Repack + Static	Variação
+1	7500	7350	-2,00%	7568	+0,91%	7216	-3,79%
+2	7650	7350	-3,92%	7568	-1,07%	7392	-3,37%
+3	7200	7050	-2,08%	7216	+0,22%	7040	-2,22%
+Média	7450	7250	-2,68%	7440,67	-0,13%	7216	-3,14%
+10. Análise do Desperdício
+
+A análise da área deve ser feita individualmente para cada teste, pois uma redução na área média não significa necessariamente que houve redução de desperdício em todos os casos.
+
+10.1 First-Fit Decreasing + Repack
+
+A estratégia apresentou redução da área nos três testes:
+
+Teste 1: redução de 2,00%;
+
+Teste 2: redução de 3,92%;
+
+Teste 3: redução de 2,08%;
+
+Média: redução de 2,68%.
+
+Nesse caso, houve redução consistente da área em todos os testes.
+
+10.2 First-Fit + Tamanho Estático
+
+A utilização do tamanho estático aumentou o tamanho de 150 para 176, representando um aumento de 17,33%.
+
+Entretanto, a redução da quantidade de soluções geradas compensou parcialmente esse aumento.
+
+Os resultados individuais foram:
+
+Teste 1: a área aumentou de 7500 para 7568, representando +0,91%;
+
+Teste 2: a área diminuiu de 7650 para 7568, representando -1,07%;
+
+Teste 3: a área aumentou de 7200 para 7216, representando +0,22%.
+
+Portanto, não houve redução consistente de desperdício nessa estratégia.
+
+Apesar da média apresentar uma pequena redução de 0,13%, dois dos três testes apresentaram aumento da área.
+
+10.3 First-Fit Decreasing + Repack + Tamanho Estático
+
+A combinação das estratégias apresentou redução da área nos três testes:
+
+Teste 1: redução de 3,79%;
+
+Teste 2: redução de 3,37%;
+
+Teste 3: redução de 2,22%;
+
+Média: redução de 3,14%.
+
+Assim, nessa configuração, a área foi menor que a do First-Fit em todos os testes analisados.
+
+11. Relação entre Tamanho, Solução Gerada e Área
+Métrica	First-Fit	FF Decreasing + Repack + Static	Variação
+Tamanho	150	176	+17,33%
+Solução Gerada Média	49,67	41,00	-17,45%
+Área Total Média	7450	7216	-3,14%
+
+A solução gerada média foi reduzida de 49,67 para 41,00.
+
+A variação percentual foi:
+
+((41,00 - 49,67) / 49,67) × 100 = -17,45%
+
+
+Portanto, houve uma redução de aproximadamente 17,45% na quantidade média de soluções geradas.
+
+12. Conclusão
+
+Os resultados mostram que o aumento do tamanho utilizado nas estratégias com Tamanho Estático, de 150 para 176, representa um aumento de 17,33%.
+
+Apesar desse aumento, a quantidade de soluções geradas foi reduzida. Na estratégia First-Fit Decreasing + Repack + Tamanho Estático, a solução gerada média passou de 49,67 para 41,00, uma redução de 17,45%.
+
+Como a área é calculada por:
+
+Área Total = Tamanho × Solução Gerada
+
+
+o aumento do tamanho foi compensado pela redução da quantidade de soluções geradas.
+
+Considerando a área total média, os resultados foram:
+
+First-Fit: área média de 7450;
+
+First-Fit Decreasing + Repack: redução média de 2,68%;
+
+First-Fit + Tamanho Estático: redução média de apenas 0,13%;
+
+First-Fit Decreasing + Repack + Tamanho Estático: redução média de 3,14%.
+
+É importante destacar que redução da área média não significa necessariamente redução de desperdício em todos os testes.
+
+Na estratégia First-Fit + Tamanho Estático, por exemplo, houve aumento da área nos testes 1 e 3, de 0,91% e 0,22%, respectivamente. Portanto, não houve uma redução consistente do desperdício nessa estratégia.
+
+Já a estratégia First-Fit Decreasing + Repack + Tamanho Estático apresentou redução da área nos três testes, com reduções de 3,79%, 3,37% e 2,22%, resultando em uma redução média de 3,14%.
+
+Dessa forma, os dados indicam que o aumento de 17,33% no tamanho não resultou em aumento da área total média, pois foi compensado pela redução da quantidade de soluções geradas. No entanto, a análise do desperdício deve considerar cada teste individualmente, e não apenas a média.
