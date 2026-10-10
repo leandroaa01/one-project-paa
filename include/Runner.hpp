@@ -7,6 +7,12 @@
 
 #include "Reader.hpp"
 
+using raw_str = const char*; //> alias para string constante
+inline raw_str MENU1 = R"(  1. Executar nesta instancia
+  2. Pular para a proxima instancia
+  0. Voltar ao menu inicial
+ )";
+
 class Runner {
 private:
     template <typename BinPackType>
@@ -35,11 +41,9 @@ public:
         for (std::size_t current = 0; current < instances.size(); ++current) {
             const auto& inst = instances[current];
 
-            std::cout << "\n----------------------------------------\n";
-            std::cout << "Instancia [" << current + 1 << "/" << instances.size() << "]: " << inst.id << "\n";
-            std::cout << "1. Executar nesta instancia\n";
-            std::cout << "2. Pular para a proxima instancia\n";
-            std::cout << "0. Voltar ao menu inicial\n";
+            std::cout << "\n------------------------------------------\n";
+            std::cout << " Instancia [" << current + 1 << "/" << instances.size() << "]: " << inst.id << "\n";
+            std::cout << MENU1;
             std::cout << "Opcao: ";
 
             int actionOption;

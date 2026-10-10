@@ -7,14 +7,27 @@
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
 
+using raw_str = const char*; //> alias para string constante
+inline raw_str MENU = R"(MENU PRINCIPAL
+  1 - Executar com  data/binpack1.txt
+  2 - Executar com  data/binpack2.txt
+  0 - Sair do programa.
+Escolha o arquivo de teste:  )";
+
+inline raw_str OPC = R"(
+EXECUTAR COM A SOLUCAO:
+ 1. First-Fit
+ 2. First-Fit Decreasing com Remanejamento
+ 3. Best-Fit
+ 4. Best-Fit  Decreasing com Remanejamento
+ 0. Mudar arquivo de teste
+Escolha o Solucao: )";
+
+
 int main()
 {
     while (true) {
-        std::cout << "\nMENU PRINCIPAL\n";
-        std::cout << "1. data/binpack1.txt\n";
-        std::cout << "2. data/binpack2.txt\n";
-        std::cout << "0. Sair\n";
-        std::cout << "Escolha o arquivo de testes: ";
+        std::cout<< MENU;
 
         int fileOption;
         if (!(std::cin >> fileOption)) break;
@@ -50,13 +63,7 @@ int main()
             continue;
         }
 
-        std::cout << "\nEscolha a solucao a ser usada:\n";
-        std::cout << "1. First-Fit\n";
-        std::cout << "2. First-Fit Decreasing com Remanejamento\n";
-        std::cout << "3. Best-Fit\n";
-        std::cout << "4. Best-Fit Decreasing com Remanejamento\n";
-        std::cout << "0. Voltar\n";
-        std::cout << "Opcao: ";
+        std::cout << OPC;
 
         int strategyOption;
         if (!(std::cin >> strategyOption)) break;
