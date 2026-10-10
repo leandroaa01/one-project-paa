@@ -14,6 +14,7 @@
 using raw_str = const char*; //> alias para string constante
 inline raw_str MENU1 = R"(  1. Executar nesta instancia
   2. Pular para a proxima instancia
+  3. Calcular tamanho
   0. Voltar ao menu inicial
  )";
 
@@ -70,9 +71,13 @@ public:
                 auto maior = list.front();
                 auto mediana = list[list.size()/2];
                 auto media = std::round((std::accumulate(list.begin(), list.end(), 0.0) / list.size()));
+                auto totalItens{0};
                 for (const auto& item : list) {
                     std::cout << item << " ";   
+                    totalItens+= item;
                 }
+
+                std::cout << "\nTotal de todos os item "<< totalItens << " e " << totalItens / 176 ;
                
 
                 std::cout << "\n";

@@ -36,17 +36,20 @@ std::size_t run(const Instance& instance, bool useDecreasingRepack = false) {
     return strategy.size();
 }
 
-int main() {
-    std::ofstream output("data/output/resultados_FirstFit.csv");
+int main(int argc, char *argv[]) {
+    bool ss {false};
+    if(std::string(argv[1]) == "-ss") ss = true; 
+
+    std::ofstream output("data/output/resultados_BestFit_176.csv");
 if (!output) {
     throw std::runtime_error("Nao foi possivel abrir a saida");
 }
 
 output << "arquivo,instancia,itens,capacidade,melhor_conhecida,"
-          "first_fit,ffd_repack,excesso_ff,excesso_ffd_repack\n";
+          "best_fit,bfd_repack,excesso_bf,excesso_bfd_repack\n";
 
 for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
-    auto instances = Reader::readInstances(path);
+    auto instances = Reader::readInstances(path, ss);
 
     if (instances.empty()) {
         throw std::runtime_error("Dataset vazio ou indisponivel");
@@ -61,8 +64,8 @@ for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
             throw std::runtime_error("Quantidade de itens invalida");
         }
 
-        const auto ff = run<FirstFit>(inst);
-        const auto ffd = run<FirstFitDecreasingRepack>(inst);
+        // const auto ff = run<FirstFit>(inst);
+        // const auto ffd = run<FirstFitDecreasingRepack>(inst);
         const auto bf = run<BestFit>(inst);
         const auto bfd = run<BestFit>(inst, true);
 
@@ -71,10 +74,10 @@ for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
                << inst.numItems << ','
                << inst.binCapacity << ','
                << inst.bestKnown << ','
-               << ff << ','
-               << ffd << ','
-               << static_cast<int>(ff) - inst.bestKnown << ','
-               << static_cast<int>(ffd) - inst.bestKnown << '\n';
+               << bf << ','
+               << bfd << ','
+               << static_cast<int>(bf) - inst.bestKnown << ','
+               << static_cast<int>(bfd) - inst.bestKnown << '\n';
     }
 
     std::cout << path << ": "
