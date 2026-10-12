@@ -47,7 +47,9 @@ public:
             if(scaticSize){
             auto static_value{176};
             inst.binCapacity = static_value;
-            inst.bestKnown = std::ceil(total / static_value);
+            inst.bestKnown = static_cast<int>(
+    std::ceil(static_cast<double>(total) / static_value)
+);
             }
             instances.push_back(inst);
         }
