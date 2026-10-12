@@ -2,10 +2,12 @@
 
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <limits>
 #include <numeric>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -114,34 +116,52 @@ public:
 
             const auto& bins = binPack.getBins();
 
+            std::ostringstream result;
+
             for (std::size_t i = 0; i < bins.size(); ++i) {
-                std::cout << "Bin " << i + 1 << " -> capacidade restante: " << bins[i].capacity
-                          << " | itens: ";
+                result << "Bin " << i + 1 << " -> capacidade restante: " << bins[i].capacity
+                       << " | itens: ";
 
                 if (bins[i].list.empty()) {
-                    std::cout << "nenhum";
+                    result << "nenhum";
                 } else {
                     for (std::size_t j = 0; j < bins[i].list.size(); ++j) {
-                        std::cout << bins[i].list[j];
+                        result << bins[i].list[j];
                         if (j + 1 < bins[i].list.size()) {
-                            std::cout << ", ";
+                            result << ", ";
                         }
                     }
                 }
 
-                std::cout << '\n';
+                result << '\n';
             }
 
             int binsEncontrados = static_cast<int>(binPack.size());
             int diferenca = binsEncontrados - inst.bestKnown;
 
-            std::cout << "\n----------------------------------------\n";
-            std::cout << "RESULTADO FINAL (" << inst.id << "):\n";
-            std::cout << "Estrategia: " << strategyName << "\n";
-            std::cout << "Caixas utilizadas: " << binsEncontrados << "\n";
-            std::cout << "Melhor solucao conhecida (Otimo): " << inst.bestKnown << "\n";
-            std::cout << "Diferenca para o otimo: " << (diferenca > 0 ? "+" : "") << diferenca << " caixas\n";
-            std::cout << "----------------------------------------\n";
+            result << "\n----------------------------------------\n";
+            result << "RESULTADO FINAL (" << inst.id << "):\n";
+            result << "Estrategia: " << strategyName << "\n";
+            result << "Caixas utilizadas: " << binsEncontrados << "\n";
+            result << "Melhor solucao conhecida (Otimo): " << inst.bestKnown << "\n";
+            result << "Diferenca para o otimo: " << (diferenca > 0 ? "+" : "") << diferenca << " caixas\n";
+            result << "----------------------------------------\n";
+
+            std::cout << result.str();
+            std::ofstream output("data/output/resultados_execucoes.txt", std::ios::app);
+            if (!output) {
+                std::cerr << "Nao foi possivel salvar os resultados em data/output/resultados_execucoes.txt\n";
+            } else {
+                output << "Instancia: " << inst.id << '\n'
+                       << "Capacidade do bin: " << binPack.getBinCapacity() << '\n'
+                       << "Total de itens: " << inst.items.size() << '\n'
+                       << result.str() << '\n';
+                if (!output) {
+                    std::cerr << "Falha ao escrever em data/output/resultados_execucoes.txt\n";
+                } else {
+                    std::cout << "Resultado salvo em data/output/resultados_execucoes.txt\n";
+                }
+            }
 
             // Só para melhorar a visualização do resultado final
             std::cout << "\nPressione [Enter] para continuar...";

@@ -5,7 +5,7 @@ This project was developed by Daniel Coelho Dos Santos (<daniel.coelho.708@ufrn.
 
 ## Compilling and Running
 > [!note]
-> This method requires CMake (>= 3.31.6) to be installed on your system. 
+> This method requires CMake (>= 3.28.3) to be installed on your system.
 > CMake is a cross-platform build system generator used to configure and compile the project. If it's not already installed, 
 > you can install it using your system’s package manager (e.g., `sudo apt install cmake` on Debian/Ubuntu or `brew install cmake` on macOS).
 
@@ -16,6 +16,7 @@ Once CMake is set up, follow the steps:
 
 ```bash
 git clone https://github.com/leandroaa01/one-project-paa.git
+```
 
 
 2. Navigate to the project directory:
@@ -33,7 +34,7 @@ cmake --build build
 or
 
 ```bash
-install.sh
+./install.sh
 ```
 
 4. Run:
@@ -43,11 +44,4 @@ install.sh
 ```
 
 > [!note]
-> Run **./bin/BinPack [ --help or -h ]** to view all available options and usage instructions.
-
-
-```bash
-Usage: BinPack  [<options>] 
-@TODO
-   
-```
+The program is menu-driven; there are no command-line options. Choose a test file, then choose one of the four algorithms. Within the algorithm menu, execute the current instance, skip it, or return to the main menu. The detailed result is also appended to `data/output/resultados_execucoes.txt`.

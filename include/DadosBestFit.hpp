@@ -36,7 +36,7 @@ std::size_t run(const Instance& instance, bool useDecreasingRepack = false) {
 
 void runBest(std::string use) {
     bool ss {false};
- std::string fileName{"data/output/resultados_BestFit.csv"};
+    std::string fileName{"data/output/resultados_BestFit.csv"};
     if(use == "s" or use =="sim" ) {
         ss = true; 
         fileName = "data/output/resultados_BestFit_176.csv";

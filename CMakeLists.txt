@@ -16,8 +16,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_BUILD_TYPE Release) # for fastier math calcs
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto -ffast-math")
-find_package(OpenMP REQUIRED) # lib to divide the evolve's loop into threads
-
 # Adds the includes directory.
 include_directories(include libs)
 
