@@ -3,24 +3,20 @@
 #include <iostream>
 #include <stdexcept>
 #include "Reader.hpp"
-#include "strategies/BestFit.hpp"
 #include "strategies/FirstFit.hpp"
 #include "strategies/FirstFitDecreasingRepack.hpp"
 
-
+namespace first {
 // Execute a partir da raiz do projeto.
 template<class Strategy>
-std::size_t run(const Instance& instance, bool useDecreasingRepack = false) {
+std::size_t run(const Instance& instance) {
     Strategy strategy(instance.binCapacity);
     if constexpr (requires { strategy.pack(instance.items); }) {
         strategy.pack(instance.items);
     } else {
         for (int item : instance.items) strategy.addItem(item);
     }
-    //for BestFit
-    // if(useDecreasingRepack){
-    //     strategy.packDecreasingRepack(instance.items);
-    // }
+   
     std::vector<int> packed;
     for (const auto& bin : strategy.getBins()) {
         int used = 0;
@@ -36,17 +32,21 @@ std::size_t run(const Instance& instance, bool useDecreasingRepack = false) {
     return strategy.size();
 }
 
-int main(int argc, char *argv[]) {
+void runFirst(std::string use) {
     bool ss {false};
-    if(std::string(argv[1]) == "-ss") ss = true; 
+    std::string fileName{"data/output/resultados_FirstFit.csv"};
+    if(use == "s" or use =="sim" ) {
+        ss = true; 
+        fileName = "data/output/resultados_FirstFit_176.csv";
+    }
 
-    std::ofstream output("data/output/resultados_BestFit_176.csv");
+    std::ofstream output(fileName);
 if (!output) {
     throw std::runtime_error("Nao foi possivel abrir a saida");
 }
 
-output << "arquivo,instancia,itens,capacidade,melhor_conhecida,"
-          "best_fit,bfd_repack,excesso_bf,excesso_bfd_repack\n";
+output << "arquivo,instancia,itens,capacidade,minimo_de_bins,"
+          "first_fit,ffd_repack,excesso_ff,excesso_ffd_repack\n";
 
 for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
     auto instances = Reader::readInstances(path, ss);
@@ -55,7 +55,7 @@ for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
         throw std::runtime_error("Dataset vazio ou indisponivel");
     }
 
-    const auto count = instances.size() / 2;
+    const auto count = instances.size();
 
     for (std::size_t i = 0; i < count; ++i) {
         const auto& inst = instances[i];
@@ -64,20 +64,18 @@ for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
             throw std::runtime_error("Quantidade de itens invalida");
         }
 
-        // const auto ff = run<FirstFit>(inst);
-        // const auto ffd = run<FirstFitDecreasingRepack>(inst);
-        const auto bf = run<BestFit>(inst);
-        const auto bfd = run<BestFit>(inst, true);
+        const auto ff = run<FirstFit>(inst);
+        const auto ffd = run<FirstFitDecreasingRepack>(inst);
 
         output << path << ','
                << inst.id << ','
                << inst.numItems << ','
                << inst.binCapacity << ','
                << inst.bestKnown << ','
-               << bf << ','
-               << bfd << ','
-               << static_cast<int>(bf) - inst.bestKnown << ','
-               << static_cast<int>(bfd) - inst.bestKnown << '\n';
+               << ff << ','
+               << ffd << ','
+               << static_cast<int>(ff) - inst.bestKnown << ','
+               << static_cast<int>(ffd) - inst.bestKnown << '\n';
     }
 
     std::cout << path << ": "
@@ -87,5 +85,6 @@ for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
 
 if (!output) {
     throw std::runtime_error("Falha ao escrever resultados");
+}
 }
 }

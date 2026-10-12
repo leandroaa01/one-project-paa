@@ -1,4 +1,4 @@
-arquivo,instancia,itens,capacidade,melhor_conhecida,first_fit,ffd_repack,excesso_ff,excesso_ffd_repack
+arquivo,instancia,itens,capacidade,minimo_de_bins,first_fit,ffd_repack,excesso_ff,excesso_ffd_repack
 data/binpack1.txt,u120_00,120,176,40,43,41,3,1
 data/binpack1.txt,u120_01,120,176,40,43,42,3,2
 data/binpack1.txt,u120_02,120,176,38,41,40,3,2
@@ -9,6 +9,16 @@ data/binpack1.txt,u120_06,120,176,40,43,42,3,2
 data/binpack1.txt,u120_07,120,176,41,44,42,3,1
 data/binpack1.txt,u120_08,120,176,42,46,44,4,2
 data/binpack1.txt,u120_09,120,176,39,42,40,3,1
+data/binpack1.txt,u120_10,120,176,43,47,45,4,2
+data/binpack1.txt,u120_11,120,176,41,44,43,3,2
+data/binpack1.txt,u120_12,120,176,40,44,42,4,2
+data/binpack1.txt,u120_13,120,176,40,43,42,3,2
+data/binpack1.txt,u120_14,120,176,41,45,43,4,2
+data/binpack1.txt,u120_15,120,176,40,44,42,4,2
+data/binpack1.txt,u120_16,120,176,43,46,45,3,2
+data/binpack1.txt,u120_17,120,176,43,47,45,4,2
+data/binpack1.txt,u120_18,120,176,41,44,42,3,1
+data/binpack1.txt,u120_19,120,176,41,44,43,3,2
 data/binpack2.txt,u250_00,250,176,83,88,85,5,2
 data/binpack2.txt,u250_01,250,176,84,89,86,5,2
 data/binpack2.txt,u250_02,250,176,86,91,88,5,2
@@ -19,3 +29,13 @@ data/binpack2.txt,u250_06,250,176,86,90,88,4,2
 data/binpack2.txt,u250_07,250,176,87,93,89,6,2
 data/binpack2.txt,u250_08,250,176,89,95,91,6,2
 data/binpack2.txt,u250_09,250,176,85,90,87,5,2
+data/binpack2.txt,u250_10,250,176,88,94,90,6,2
+data/binpack2.txt,u250_11,250,176,85,92,88,7,3
+data/binpack2.txt,u250_12,250,176,89,95,91,6,2
+data/binpack2.txt,u250_13,250,176,86,92,88,6,2
+data/binpack2.txt,u250_14,250,176,84,89,86,5,2
+data/binpack2.txt,u250_15,250,176,89,94,91,5,2
+data/binpack2.txt,u250_16,250,176,82,87,84,5,2
+data/binpack2.txt,u250_17,250,176,84,89,86,5,2
+data/binpack2.txt,u250_18,250,176,84,90,87,6,3
+data/binpack2.txt,u250_19,250,176,86,91,88,5,2
