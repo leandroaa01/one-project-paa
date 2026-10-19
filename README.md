@@ -5,6 +5,9 @@ This project was developed by Daniel Coelho Dos Santos (<daniel.coelho.708@ufrn.
 
 ## Repository Structure
 
+- **Main program:** `Main.cpp`
+- **Final report (PDF):** `docs/Relatorio_Final.pdf`
+
 ```text
 .
 ├── CMakeLists.txt
@@ -46,7 +49,7 @@ This project was developed by Daniel Coelho Dos Santos (<daniel.coelho.708@ufrn.
     └── Runner.cpp
 ```
 
-Os CSVs gerados pelos experimentos ficam em `data/output/`. A execução interativa também pode criar `data/output/resultados_execucoes.txt`.
+Experiment CSV files are stored in `data/output/`. Interactive runs may also create `data/output/resultados_execucoes.txt`.
 
 ## Compilling and Running
 > [!note]
