@@ -1,0 +1,56 @@
+INSTRUCOES PARA COMPILAR E EXECUTAR O BIN PACKING
+
+REQUISITOS
+- CMake 3.28.3 ou superior.
+- Compilador C++ com suporte ao padrão C++23.
+- Não são necessárias bibliotecas externas.
+
+COMPILACAO
+Abra um terminal na pasta raiz do repositório (a pasta que contém
+CMakeLists.txt) e execute:
+
+    cmake -S . -B build
+    cmake --build build
+
+EXECUCAO
+Ainda na pasta raiz do repositório, execute:
+
+    ./bin/BinPack
+
+O programa utiliza caminhos relativos; por isso, deve ser iniciado a
+partir da pasta raiz do repositório.
+
+USO DOS MENUS
+1. No menu principal, escolha o conjunto de instâncias:
+   1 - data/binpack1.txt (instâncias com 120 itens)
+   2 - data/binpack2.txt (instâncias com 250 itens)
+   3 - gerar as tabelas CSV dos algoritmos
+   0 - encerrar o programa
+
+2. Ao escolher 1 ou 2, selecione uma estratégia:
+   1 - First Fit
+   2 - First Fit Decreasing com remanejamento
+   3 - Best Fit
+   4 - Best Fit Decreasing com remanejamento
+   0 - voltar ao menu principal
+
+3. Para cada instância, escolha uma opção:
+   1 - executar a estratégia e mostrar a configuração dos bins e o resultado
+   2 - pular para a próxima instância
+   3 - exibir estatísticas da instância
+   0 - voltar ao menu principal
+
+O resultado de cada execução é exibido na tela e acrescentado ao arquivo
+data/output/resultados_execucoes.txt.
+
+GERACAO DAS TABELAS CSV
+No menu principal, escolha 3. Quando perguntado sobre usar um tamanho
+estático, digite "s" para executar com capacidade 176; para usar a
+capacidade original das instâncias, digite "n" (ou outra resposta que
+não seja "s" ou "sim"). Os resultados são gravados em data/output/:
+
+- resultados_FirstFit.csv e resultados_BestFit.csv para capacidade 150;
+- resultados_FirstFit_176.csv e resultados_BestFit_176.csv para capacidade 176.
+
+A geração das tabelas processa os dois conjuntos de instâncias e encerra
+o programa ao terminar.
