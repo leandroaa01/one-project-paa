@@ -3,6 +3,51 @@
 ## Authors
 This project was developed by Daniel Coelho Dos Santos (<daniel.coelho.708@ufrn.edu.br>) and Leandro Andrade de Araujo (<leandro.andrade.401@ufrn.edu.br>) as part of the *PAA* course at UFRN.
 
+## Repository Structure
+
+```text
+.
+├── CMakeLists.txt
+├── install.sh
+├── Main.cpp
+├── data/
+│   ├── binpack1.txt
+│   ├── binpack2.txt
+│   └── output/
+│       ├── resultados_BestFit.csv
+│       ├── resultados_BestFit_176.csv
+│       ├── resultados_FirstFit.csv
+│       └── resultados_FirstFit_176.csv
+├── docs/
+│   ├── Relatorio_Final.pdf
+│   ├── Trabalho_1_-_Algoritmo_Aproximativo_-_Direes.pdf
+│   └── relatorio/
+│       ├── relatorio_bin_packing.tex
+│       ├── referencias.bib
+│       ├── sbc-template.sty
+│       ├── sbc.bst
+│       ├── caption2.sty
+│       └── table-*.png
+├── include/
+│   ├── strategies/
+│   │   ├── BestFit.hpp
+│   │   ├── FirstFit.hpp
+│   │   └── FirstFitDecreasingRepack.hpp
+│   ├── Bin.hpp
+│   ├── DadosBestFit.hpp
+│   ├── DadosFirstFit.hpp
+│   ├── Reader.hpp
+│   └── Runner.hpp
+└── src/
+    ├── strategies/
+    │   ├── FirstFit.cpp
+    │   └── FirstFitDecreasingRepack.cpp
+    ├── Reader.cpp
+    └── Runner.cpp
+```
+
+Os CSVs gerados pelos experimentos ficam em `data/output/`. A execução interativa também pode criar `data/output/resultados_execucoes.txt`.
+
 ## Compilling and Running
 > [!note]
 > This method requires CMake (>= 3.28.3) to be installed on your system.
