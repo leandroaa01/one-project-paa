@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+#include "BranchAndBoundConfig.hpp"
+
 #include "Reader.hpp"
 
 using raw_str = const char*; //> alias para string constante
@@ -112,8 +114,8 @@ public:
             BinPackType binPack(inst.binCapacity);
 
             // limite de tempo de 10 minutos para a busca exata (Branch-and-Bound)
-            if constexpr (requires { binPack.setTimeLimit(std::chrono::milliseconds(60000)); }) {
-                binPack.setTimeLimit(std::chrono::seconds(600));
+            if constexpr (requires { binPack.setTimeLimit(branch_and_bound::defaultTimeLimit); }) {
+                binPack.setTimeLimit(branch_and_bound::defaultTimeLimit);
             }
 
             if constexpr (requires { binPack.setTraceCallback(std::function<void(const std::string&)>{}, std::size_t{}); }) {

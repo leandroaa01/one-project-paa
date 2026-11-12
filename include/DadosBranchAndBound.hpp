@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "BranchAndBoundConfig.hpp"
 #include "Reader.hpp"
 #include "strategies/BranchAndBound.hpp"
 
@@ -16,8 +17,8 @@ namespace branch_and_bound {
 inline void runBranchAndBound(const std::string& use) {
     const bool staticCapacity = use == "s" || use == "sim";
     const std::string fileName = staticCapacity
-                                     ? "data/output/resultados_BranchAndBound_176.csv"
-                                     : "data/output/resultados_BranchAndBound.csv";
+                                     ? "data/output/resultados_BranchAndBound_176_600s.csv"
+                                     : "data/output/resultados_BranchAndBound_600s.csv";
 
     std::ofstream output(fileName);
     if (!output) {
@@ -40,8 +41,8 @@ inline void runBranchAndBound(const std::string& use) {
             }
 
             BranchAndBound solver(instance.binCapacity);
-            constexpr int timeLimitSeconds = 60;
-            solver.setTimeLimit(std::chrono::seconds(timeLimitSeconds));
+            constexpr int timeLimitSeconds = static_cast<int>(defaultTimeLimit.count());
+            solver.setTimeLimit(defaultTimeLimit);
             solver.setProgressCallback([](std::uint64_t visited, std::uint64_t pruned, int upperBound) {
                 std::cout << "\r  nos: " << visited << " | podados: " << pruned
                           << " | melhor UB: " << upperBound << std::flush;
