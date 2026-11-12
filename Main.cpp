@@ -2,10 +2,12 @@
 #include <string>
 
 #include "DadosBestFit.hpp"
+#include "DadosBranchAndBound.hpp"
 #include "DadosFirstFit.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
 #include "include/strategies/BestFit.hpp"
+#include "include/strategies/BranchAndBound.hpp"
 #include "include/strategies/FirstFit.hpp"
 #include "include/strategies/FirstFitDecreasingRepack.hpp"
 
@@ -23,6 +25,7 @@ EXECUTAR COM A SOLUCAO:
  2. First-Fit Decreasing com Remanejamento
  3. Best-Fit
  4. Best-Fit  Decreasing com Remanejamento
+ 5. Branch-and-Bound
  0. Mudar arquivo de teste
 Escolha o Solucao: )";
 
@@ -58,6 +61,8 @@ int main()
         best::runBest(op);
         std::cout << "criando tabela do Firt Fit\n";
         first::runFirst(op);
+        std::cout << "criando tabela do Branch-and-Bound\n";
+        branch_and_bound::runBranchAndBound(op);
         std::cout << "tabelas em /data/output/\n";
         std::cout << "Encerrando o programa...\n";
         return 0;
@@ -96,6 +101,9 @@ int main()
         break;
       case 4:
         Runner::runBenchmark<BestFit>(instances, "Best-Fit Decreasing + Repack", true);
+        break;
+      case 5:
+        Runner::runBenchmark<BranchAndBound>(instances, "Branch-and-Bound");
         break;
       default:
         std::cout << "Opcao de solucao invalida!\n";
