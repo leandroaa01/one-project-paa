@@ -113,7 +113,7 @@ public:
 
             BinPackType binPack(inst.binCapacity);
 
-            // limite de tempo de 10 minutos para a busca exata (Branch-and-Bound)
+            // Limite de 10 minutos para as buscas exatas.
             if constexpr (requires { binPack.setTimeLimit(branch_and_bound::defaultTimeLimit); }) {
                 binPack.setTimeLimit(branch_and_bound::defaultTimeLimit);
             }
@@ -126,7 +126,7 @@ public:
             }
 
             if constexpr (requires { binPack.setProgressCallback(std::function<void(std::uint64_t, std::uint64_t, int)>{}); }) {
-                std::cout << "\nBusca exata Branch-and-Bound em andamento:\n";
+                std::cout << "\nBusca exata " << strategyName << " em andamento:\n";
                 binPack.setProgressCallback([](std::uint64_t visited, std::uint64_t pruned, int upperBound) {
                     std::cout << "\r  Nos visitados: " << visited
                               << " | podados: " << pruned
@@ -187,6 +187,9 @@ public:
                        << "Nos visitados: " << binPack.getNodesVisited() << "\n"
                        << "Nos podados: " << binPack.getNodesPruned() << "\n"
                        << "Otimo comprovado: " << (binPack.isOptimal() ? "sim" : "nao") << "\n";
+            }
+            if constexpr (requires { binPack.getSeed(); }) {
+                result << "Semente aleatoria: " << binPack.getSeed() << "\n";
             }
             result << "----------------------------------------\n";
 

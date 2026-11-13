@@ -4,12 +4,14 @@
 #include "DadosBestFit.hpp"
 #include "DadosBranchAndBound.hpp"
 #include "DadosFirstFit.hpp"
+#include "DadosLasVegas.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
 #include "include/strategies/BestFit.hpp"
 #include "include/strategies/BranchAndBound.hpp"
 #include "include/strategies/FirstFit.hpp"
 #include "include/strategies/FirstFitDecreasingRepack.hpp"
+#include "include/strategies/LasVegas.hpp"
 
 using raw_str = const char*; //> alias para string constante
 inline raw_str MENU = R"(MENU PRINCIPAL
@@ -26,6 +28,7 @@ EXECUTAR COM A SOLUCAO:
  3. Best-Fit
  4. Best-Fit  Decreasing com Remanejamento
  5. Branch-and-Bound
+ 6. Las Vegas (busca exata aleatorizada)
  0. Mudar arquivo de teste
 Escolha o Solucao: )";
 
@@ -58,12 +61,13 @@ Qual tabela deseja gerar?
  1 - Best-Fit e Best-Fit Decreasing com Remanejamento
  2 - First-Fit e First-Fit Decreasing com Remanejamento
  3 - Branch-and-Bound
+ 4 - Las Vegas (busca exata aleatorizada)
  0 - Voltar
 Escolha: )";
         int tableOption;
         if (!(std::cin >> tableOption)) return 0;
         if (tableOption == 0) continue;
-        if (tableOption < 1 || tableOption > 3) {
+        if (tableOption < 1 || tableOption > 4) {
           std::cout << "Opcao de tabela invalida!\n";
           continue;
         }
@@ -78,9 +82,12 @@ Escolha: )";
         } else if (tableOption == 2) {
           std::cout << "Criando tabela de First-Fit...\n";
           first::runFirst(op);
-        } else {
+        } else if (tableOption == 3) {
           std::cout << "Criando tabela de Branch-and-Bound (limite de 600 segundos por instancia)...\n";
           branch_and_bound::runBranchAndBound(op);
+        } else {
+          std::cout << "Criando tabela Las Vegas (limite de 600 segundos por instancia)...\n";
+          las_vegas::runLasVegas(op);
         }
         std::cout << "Tabela salva em data/output/.\n";
         return 0;
@@ -123,6 +130,9 @@ Escolha: )";
         break;
       case 5:
         Runner::runBenchmark<BranchAndBound>(instances, "Branch-and-Bound");
+        break;
+      case 6:
+        Runner::runBenchmark<LasVegas>(instances, "Las Vegas");
         break;
       default:
         std::cout << "Opcao de solucao invalida!\n";
