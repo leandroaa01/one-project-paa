@@ -16,9 +16,11 @@ namespace branch_and_bound {
 
 inline void runBranchAndBound(const std::string& use) {
     const bool staticCapacity = use == "s" || use == "sim";
-    const std::string fileName = staticCapacity
-                                     ? "data/output/resultados_BranchAndBound_176_600s.csv"
-                                     : "data/output/resultados_BranchAndBound_600s.csv";
+    const std::string fileStem = staticCapacity
+                                     ? "data/output/resultados_BranchAndBound_176"
+                                     : "data/output/resultados_BranchAndBound";
+    const std::string fileName = fileStem + "-" +
+                                 std::to_string(defaultTimeLimit.count()) + "s.csv";
 
     std::ofstream output(fileName);
     if (!output) {
