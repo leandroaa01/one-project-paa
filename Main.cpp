@@ -2,10 +2,12 @@
 #include <string>
 
 #include "DadosBestFit.hpp"
+#include "DadosBranchAndBound.hpp"
 #include "DadosFirstFit.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
 #include "include/strategies/BestFit.hpp"
+#include "include/strategies/BranchAndBound.hpp"
 #include "include/strategies/FirstFit.hpp"
 #include "include/strategies/FirstFitDecreasingRepack.hpp"
 
@@ -13,7 +15,7 @@ using raw_str = const char*; //> alias para string constante
 inline raw_str MENU = R"(MENU PRINCIPAL
   1 - Executar com  data/binpack1.txt
   2 - Executar com  data/binpack2.txt
-  3 - Gera tabela de dados dos Algoritmos
+  3 - Gerar tabela de um algoritmo
   0 - Sair do programa.
 Escolha o arquivo de teste:  )";
 
@@ -23,6 +25,7 @@ EXECUTAR COM A SOLUCAO:
  2. First-Fit Decreasing com Remanejamento
  3. Best-Fit
  4. Best-Fit  Decreasing com Remanejamento
+ 5. Branch-and-Bound
  0. Mudar arquivo de teste
 Escolha o Solucao: )";
 
@@ -49,18 +52,39 @@ int main()
       case 2:
         path = "data/binpack2.txt";
         break;
-      case 3:
+      case 3: {
+        std::cout << R"(
+Qual tabela deseja gerar?
+ 1 - Best-Fit e Best-Fit Decreasing com Remanejamento
+ 2 - First-Fit e First-Fit Decreasing com Remanejamento
+ 3 - Branch-and-Bound
+ 0 - Voltar
+Escolha: )";
+        int tableOption;
+        if (!(std::cin >> tableOption)) return 0;
+        if (tableOption == 0) continue;
+        if (tableOption < 1 || tableOption > 3) {
+          std::cout << "Opcao de tabela invalida!\n";
+          continue;
+        }
+
         std::cout << "Quer usar um tamanho estatico dos dados, N/s? ";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::getline(std::cin, op);
         if (op.empty()) op = "n";
-        std::cout << "criando tabela do Best Fit\n";
-        best::runBest(op);
-        std::cout << "criando tabela do Firt Fit\n";
-        first::runFirst(op);
-        std::cout << "tabelas em /data/output/\n";
-        std::cout << "Encerrando o programa...\n";
+        if (tableOption == 1) {
+          std::cout << "Criando tabela de Best-Fit...\n";
+          best::runBest(op);
+        } else if (tableOption == 2) {
+          std::cout << "Criando tabela de First-Fit...\n";
+          first::runFirst(op);
+        } else {
+          std::cout << "Criando tabela de Branch-and-Bound (limite de 600 segundos por instancia)...\n";
+          branch_and_bound::runBranchAndBound(op);
+        }
+        std::cout << "Tabela salva em data/output/.\n";
         return 0;
+      }
       default:
         std::cout << "Opcao invalida!\n";
         invalidOption = true;
@@ -96,6 +120,9 @@ int main()
         break;
       case 4:
         Runner::runBenchmark<BestFit>(instances, "Best-Fit Decreasing + Repack", true);
+        break;
+      case 5:
+        Runner::runBenchmark<BranchAndBound>(instances, "Branch-and-Bound");
         break;
       default:
         std::cout << "Opcao de solucao invalida!\n";

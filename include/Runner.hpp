@@ -1,8 +1,11 @@
 #pragma once
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
+#include <cstdint>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -10,6 +13,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "BranchAndBoundConfig.hpp"
 
 #include "Reader.hpp"
 
@@ -108,11 +113,36 @@ public:
 
             BinPackType binPack(inst.binCapacity);
 
+            // limite de tempo de 10 minutos para a busca exata (Branch-and-Bound)
+            if constexpr (requires { binPack.setTimeLimit(branch_and_bound::defaultTimeLimit); }) {
+                binPack.setTimeLimit(branch_and_bound::defaultTimeLimit);
+            }
+
+            if constexpr (requires { binPack.setTraceCallback(std::function<void(const std::string&)>{}, std::size_t{}); }) {
+                std::cout << "\nPasso a passo da busca (ate 150 eventos):\n";
+                binPack.setTraceCallback([](const std::string& step) {
+                    std::cout << "  - " << step << '\n';
+                }, 150);
+            }
+
+            if constexpr (requires { binPack.setProgressCallback(std::function<void(std::uint64_t, std::uint64_t, int)>{}); }) {
+                std::cout << "\nBusca exata Branch-and-Bound em andamento:\n";
+                binPack.setProgressCallback([](std::uint64_t visited, std::uint64_t pruned, int upperBound) {
+                    std::cout << "\r  Nos visitados: " << visited
+                              << " | podados: " << pruned
+                              << " | melhor limite superior: " << upperBound << "   " << std::flush;
+                });
+            }
+
             std::cout << "\nTeste do BinPack (" << inst.id << ")\n";
             std::cout << "Capacidade do bin: " << binPack.getBinCapacity() << "\n";
             std::cout << "Total de itens a processar: " << inst.items.size() << "\n\n";
 
             packInstance(binPack, inst.items, useDecreasingRepack);
+
+            if constexpr (requires { binPack.setProgressCallback(std::function<void(std::uint64_t, std::uint64_t, int)>{}); }) {
+                std::cout << "\n\n";
+            }
 
             const auto& bins = binPack.getBins();
 
@@ -145,6 +175,19 @@ public:
             result << "Caixas utilizadas: " << binsEncontrados << "\n";
             result << "Melhor solucao conhecida (Otimo): " << inst.bestKnown << "\n";
             result << "Diferenca para o otimo: " << (diferenca > 0 ? "+" : "") << diferenca << " caixas\n";
+            if constexpr (requires {
+                              binPack.getInitialUpperBound();
+                              binPack.getLowerBound();
+                              binPack.getNodesVisited();
+                              binPack.getNodesPruned();
+                              binPack.isOptimal();
+                          }) {
+                result << "Upper Bound inicial: " << binPack.getInitialUpperBound() << "\n"
+                       << "Lower Bound global: " << binPack.getLowerBound() << "\n"
+                       << "Nos visitados: " << binPack.getNodesVisited() << "\n"
+                       << "Nos podados: " << binPack.getNodesPruned() << "\n"
+                       << "Otimo comprovado: " << (binPack.isOptimal() ? "sim" : "nao") << "\n";
+            }
             result << "----------------------------------------\n";
 
             std::cout << result.str();
