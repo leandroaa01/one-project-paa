@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "BranchAndBoundConfig.hpp"
+#include "LasVegasConfig.hpp"
 #include "Reader.hpp"
 #include "strategies/LasVegas.hpp"
 
@@ -21,7 +21,7 @@ inline void runLasVegas(const std::string& use) {
                                      ? "data/output/resultados_LasVegas_176"
                                      : "data/output/resultados_LasVegas";
     const std::string runStem = fileStem + "-" +
-                                std::to_string(branch_and_bound::defaultTimeLimit.count()) +
+                                std::to_string(tableTimeLimit.count()) +
                                 "s";
     std::string fileName = runStem + ".csv";
     for (std::size_t run = 2; std::filesystem::exists(fileName); ++run) {
@@ -49,9 +49,8 @@ inline void runLasVegas(const std::string& use) {
             }
 
             LasVegas solver(instance.binCapacity);
-            constexpr int timeLimitSeconds = static_cast<int>(
-                branch_and_bound::defaultTimeLimit.count());
-            solver.setTimeLimit(branch_and_bound::defaultTimeLimit);
+            constexpr int timeLimitSeconds = static_cast<int>(tableTimeLimit.count());
+            solver.setTimeLimit(tableTimeLimit);
             solver.setProgressCallback([](std::uint64_t visited, std::uint64_t pruned, int upperBound) {
                 std::cout << "\r  nos: " << visited << " | podados: " << pruned
                           << " | melhor solucao: " << upperBound << std::flush;

@@ -86,7 +86,9 @@ Escolha: )";
           std::cout << "Criando tabela de Branch-and-Bound (limite de 600 segundos por instancia)...\n";
           branch_and_bound::runBranchAndBound(op);
         } else {
-          std::cout << "Criando tabela Las Vegas (limite de 600 segundos por instancia)...\n";
+          std::cout << "Criando tabela Las Vegas (limite de "
+                    << las_vegas::tableTimeLimit.count()
+                    << " segundos por instancia)...\n";
           las_vegas::runLasVegas(op);
         }
         std::cout << "Tabela salva em data/output/.\n";
