@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
@@ -19,8 +20,12 @@ inline void runBranchAndBound(const std::string& use) {
     const std::string fileStem = staticCapacity
                                      ? "data/output/resultados_BranchAndBound_176"
                                      : "data/output/resultados_BranchAndBound";
-    const std::string fileName = fileStem + "-" +
-                                 std::to_string(defaultTimeLimit.count()) + "s.csv";
+    const std::string runStem = fileStem + "-" +
+                                std::to_string(defaultTimeLimit.count()) + "s";
+    std::string fileName = runStem + ".csv";
+    for (std::size_t run = 2; std::filesystem::exists(fileName); ++run) {
+        fileName = runStem + "-" + std::to_string(run) + ".csv";
+    }
 
     std::ofstream output(fileName);
     if (!output) {
