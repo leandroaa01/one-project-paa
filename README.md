@@ -1,95 +1,139 @@
-#  Algorithm For Bin Packing
+# Algorithm for Bin Packing
 
-## Authors
-This project was developed by Daniel Coelho Dos Santos (<daniel.coelho.708@ufrn.edu.br>) and Leandro Andrade de Araujo (<leandro.andrade.401@ufrn.edu.br>) as part of the *PAA* course at UFRN.
+Projeto desenvolvido por Daniel Coelho dos Santos (<daniel.coelho.708@ufrn.edu.br>) e Leandro Andrade de Araujo (<leandro.andrade.401@ufrn.edu.br>) para a disciplina Projeto e Analise de Algoritmos (PAA) da UFRN.
 
-## Repository Structure
+## Sobre o projeto
 
-- **Main program:** `Main.cpp`
-- **Final report (PDF):** `docs/Relatorio_Final.pdf`
+O projeto implementa heuristicas e metodos de busca para o problema de empacotamento em caixas (Bin Packing). A primeira unidade aborda algoritmos aproximativos, enquanto a segunda unidade amplia a solucao com buscas exatas e aleatorizadas.
+
+O programa le instancias dos arquivos `data/binpack1.txt` e `data/binpack2.txt`, permite executar cada instancia individualmente e gera tabelas CSV para comparacao dos resultados.
+
+## Estrategias implementadas
+
+### Primeira unidade
+
+- **First-Fit:** percorre os bins na ordem existente e coloca o item no primeiro bin com capacidade suficiente.
+- **First-Fit Decreasing com Remanejamento:** organiza os itens em ordem decrescente, aplica First-Fit e tenta remover bins realocando seus itens.
+- **Best-Fit:** coloca o item no bin que deixar a menor capacidade restante depois da insercao.
+- **Best-Fit Decreasing com Remanejamento:** organiza os itens em ordem decrescente, aplica Best-Fit e repete a remocao de bins quando todos os itens cabem em outros bins.
+
+### Segunda unidade
+
+- **Branch-and-Bound:** realiza busca exata em arvore, ordena os itens em ordem decrescente e utiliza limites inferiores, limites superiores e podas para encontrar a solucao otima. A busca usa um limite de 600 segundos por instancia.
+- **Las Vegas (busca exata aleatorizada):** reutiliza a estrutura de Branch-and-Bound, aleatoriza a ordem de exploracao dos candidatos e ainda comprova a otimalidade quando a busca termina sem interrupcao.
+
+## Menu principal
+
+O programa possui tres areas principais:
+
+1. Executar o arquivo `data/binpack1.txt`.
+2. Executar o arquivo `data/binpack2.txt`.
+3. Gerar uma tabela CSV de desempenho de um dos metodos.
+
+Ao executar uma instancia, o usuario pode:
+
+- executar a instancia atual;
+- pular para a instancia seguinte;
+- calcular estatisticas dos itens em ordem decrescente;
+- voltar ao menu principal.
+
+## Geracao de tabelas
+
+O menu de tabelas oferece:
+
+1. Best-Fit e Best-Fit Decreasing com Remanejamento.
+2. First-Fit e First-Fit Decreasing com Remanejamento.
+3. Branch-and-Bound.
+4. Las Vegas.
+
+Ao escolher uma tabela, o programa pergunta se deve usar capacidade estatica de 176 ou a capacidade registrada em cada instancia:
+
+- digite `s` ou `sim` para usar capacidade estatica;
+- digite `n` ou outro valor para usar a capacidade original das instancias.
+
+Os CSV sao escritos em `data/output/`. Os nomes evitam sobrescrever execucoes anteriores quando o mesmo tipo de tabela ja existe.
+
+## Estrutura do repositorio
 
 ```text
 .
 ├── CMakeLists.txt
 ├── install.sh
 ├── Main.cpp
+├── README.md
 ├── data/
 │   ├── binpack1.txt
 │   ├── binpack2.txt
 │   └── output/
 │       ├── resultados_BestFit.csv
-│       ├── resultados_BestFit_176.csv
 │       ├── resultados_FirstFit.csv
-│       └── resultados_FirstFit_176.csv
+│       ├── resultados_BranchAndBound-600s.csv
+│       └── resultados_LasVegas-1200s.csv
 ├── docs/
-│   ├── Relatorio_Final.pdf
-│   ├── Trabalho_1_-_Algoritmo_Aproximativo_-_Direes.pdf
 │   └── relatorio/
-│       ├── relatorio_bin_packing.tex
-│       ├── referencias.bib
-│       ├── sbc-template.sty
-│       ├── sbc.bst
-│       ├── caption2.sty
-│       └── table-*.png
 ├── include/
-│   ├── strategies/
-│   │   ├── BestFit.hpp
-│   │   ├── FirstFit.hpp
-│   │   └── FirstFitDecreasingRepack.hpp
 │   ├── Bin.hpp
+│   ├── Reader.hpp
+│   ├── Runner.hpp
+│   ├── BranchAndBoundConfig.hpp
+│   ├── LasVegasConfig.hpp
 │   ├── DadosBestFit.hpp
 │   ├── DadosFirstFit.hpp
-│   ├── Reader.hpp
-│   └── Runner.hpp
+│   ├── DadosBranchAndBound.hpp
+│   ├── DadosLasVegas.hpp
+│   └── strategies/
+│       ├── FirstFit.hpp
+│       ├── FirstFitDecreasingRepack.hpp
+│       ├── BestFit.hpp
+│       ├── BranchAndBound.hpp
+│       └── LasVegas.hpp
 └── src/
-    ├── strategies/
-    │   ├── FirstFit.cpp
-    │   └── FirstFitDecreasingRepack.cpp
     ├── Reader.cpp
-    └── Runner.cpp
+    ├── Runner.cpp
+    └── strategies/
+        ├── FirstFit.cpp
+        └── FirstFitDecreasingRepack.cpp
 ```
 
-Experiment CSV files are stored in `data/output/`. Interactive runs may also create `data/output/resultados_execucoes.txt`.
+## Compilacao e execucao
 
-## Compilling and Running
-> [!note]
-> This method requires CMake (>= 3.28.3) to be installed on your system.
-> CMake is a cross-platform build system generator used to configure and compile the project. If it's not already installed, 
-> you can install it using your system’s package manager (e.g., `sudo apt install cmake` on Debian/Ubuntu or `brew install cmake` on macOS).
+### Requisitos
 
-Once CMake is set up, follow the steps:
+- CMake 3.28 ou superior.
+- Compilador C++ com suporte a C++23.
 
+No Debian ou Ubuntu, por exemplo:
 
-1 Clone this repository:
+```bash
+sudo apt install cmake g++
+```
+
+### Compilar
+
+Clone o repositorio e entre no diretorio:
 
 ```bash
 git clone https://github.com/leandroaa01/one-project-paa.git
-```
-
-
-2. Navigate to the project directory:
-
-```bash
 cd one-project-paa
 ```
 
-3. Compile and build the program using `cmake`:
+Compile com CMake:
 
 ```bash
-cmake -S . -B build 
+cmake -S . -B build
 cmake --build build
 ```
-or
+
+Ou execute o script fornecido pelo projeto:
 
 ```bash
 ./install.sh
 ```
 
-4. Run:
+### Executar
 
 ```bash
-./bin/BinPack 
+./bin/BinPack
 ```
 
-> [!note]
-The program is menu-driven; there are no command-line options. Choose a test file, then choose one of the four algorithms. Within the algorithm menu, execute the current instance, skip it, or return to the main menu. The detailed result is also appended to `data/output/resultados_execucoes.txt`.
+Durante a execucao interativa, selecione o arquivo de teste e depois uma das seis estrategias disponiveis. As buscas exatas podem imprimir o progresso de nos visitados e podados.
