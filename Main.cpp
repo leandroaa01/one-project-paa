@@ -5,6 +5,7 @@
 #include "DadosBranchAndBound.hpp"
 #include "DadosFirstFit.hpp"
 #include "DadosLasVegas.hpp"
+#include "DadosSA.hpp"
 #include "include/Reader.hpp"
 #include "include/Runner.hpp"
 #include "include/strategies/BestFit.hpp"
@@ -12,6 +13,7 @@
 #include "include/strategies/FirstFit.hpp"
 #include "include/strategies/FirstFitDecreasingRepack.hpp"
 #include "include/strategies/LasVegas.hpp"
+#include "include/strategies/SimulatedAnnealing.hpp"
 
 using raw_str = const char*; //> alias para string constante
 inline raw_str MENU = R"(MENU PRINCIPAL
@@ -29,6 +31,7 @@ EXECUTAR COM A SOLUCAO:
  4. Best-Fit  Decreasing com Remanejamento
  5. Branch-and-Bound
  6. Las Vegas (busca exata aleatorizada)
+ 7. Simulated Annealing
  0. Mudar arquivo de teste
 Escolha o Solucao: )";
 
@@ -62,12 +65,13 @@ Qual tabela deseja gerar?
  2 - First-Fit e First-Fit Decreasing com Remanejamento
  3 - Branch-and-Bound
  4 - Las Vegas (busca exata aleatorizada)
+ 5 - Simulated Annealing
  0 - Voltar
 Escolha: )";
         int tableOption;
         if (!(std::cin >> tableOption)) return 0;
         if (tableOption == 0) continue;
-        if (tableOption < 1 || tableOption > 4) {
+        if (tableOption < 1 || tableOption > 5) {
           std::cout << "Opcao de tabela invalida!\n";
           continue;
         }
@@ -85,11 +89,14 @@ Escolha: )";
         } else if (tableOption == 3) {
           std::cout << "Criando tabela de Branch-and-Bound (limite de 600 segundos por instancia)...\n";
           branch_and_bound::runBranchAndBound(op);
-        } else {
+        } else if (tableOption == 4) {
           std::cout << "Criando tabela Las Vegas (limite de "
                     << las_vegas::tableTimeLimit.count()
                     << " segundos por instancia)...\n";
           las_vegas::runLasVegas(op);
+        } else {
+          std::cout << "Criando tabela Simulated Annealing...\n";
+          simulated_annealing::runSA(op);
         }
         std::cout << "Tabela salva em data/output/.\n";
         return 0;
@@ -135,6 +142,9 @@ Escolha: )";
         break;
       case 6:
         Runner::runBenchmark<LasVegas>(instances, "Las Vegas");
+        break;
+      case 7:
+        Runner::runBenchmark<SimulatedAnnealing>(instances, "Simulated Annealing");
         break;
       default:
         std::cout << "Opcao de solucao invalida!\n";
