@@ -15,11 +15,8 @@
 
 namespace branch_and_bound {
 
-inline void runBranchAndBound(const std::string& use) {
-    const bool staticCapacity = use == "s" || use == "sim";
-    const std::string fileStem = staticCapacity
-                                     ? "data/output/resultados_BranchAndBound_176"
-                                     : "data/output/resultados_BranchAndBound";
+inline void runBranchAndBound() {
+    const std::string fileStem = "data/output/resultados_BranchAndBound";
     const std::string runStem = fileStem + "-" +
                                 std::to_string(defaultTimeLimit.count()) + "s";
     std::string fileName = runStem + ".csv";
@@ -37,7 +34,7 @@ inline void runBranchAndBound(const std::string& use) {
               "excesso,tempo_limite_segundos,status\n";
 
     for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
-        const auto instances = Reader::readInstances(path, staticCapacity);
+        const auto instances = Reader::readInstances(path);
         if (instances.empty()) {
             throw std::runtime_error("Dataset vazio ou indisponivel: " + std::string(path));
         }

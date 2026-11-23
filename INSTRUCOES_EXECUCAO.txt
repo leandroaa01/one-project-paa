@@ -44,13 +44,8 @@ O resultado de cada execução é exibido na tela e acrescentado ao arquivo
 data/output/resultados_execucoes.txt.
 
 GERACAO DAS TABELAS CSV
-No menu principal, escolha 3. Quando perguntado sobre usar um tamanho
-estático, digite "s" para executar com capacidade 176; para usar a
-capacidade original das instâncias, digite "n" (ou outra resposta que
-não seja "s" ou "sim"). Os resultados são gravados em data/output/:
-
-- resultados_FirstFit.csv e resultados_BestFit.csv para capacidade 150;
-- resultados_FirstFit_176.csv e resultados_BestFit_176.csv para capacidade 176.
+No menu principal, escolha 3. As tabelas usam a capacidade registrada em
+cada instância e são gravadas em data/output/.
 
 A geração das tabelas processa os dois conjuntos de instâncias e encerra
 o programa ao terminar.

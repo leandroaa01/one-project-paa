@@ -50,7 +50,6 @@ int main()
 
     std::string path;
     bool invalidOption = false;
-    std::string op{ "n" };
     switch (fileOption) {
       case 1:
         path = "data/binpack1.txt";
@@ -76,27 +75,23 @@ Escolha: )";
           continue;
         }
 
-        std::cout << "Quer usar um tamanho estatico dos dados, N/s? ";
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        std::getline(std::cin, op);
-        if (op.empty()) op = "n";
         if (tableOption == 1) {
           std::cout << "Criando tabela de Best-Fit...\n";
-          best::runBest(op);
+          best::runBest();
         } else if (tableOption == 2) {
           std::cout << "Criando tabela de First-Fit...\n";
-          first::runFirst(op);
+          first::runFirst();
         } else if (tableOption == 3) {
           std::cout << "Criando tabela de Branch-and-Bound (limite de 600 segundos por instancia)...\n";
-          branch_and_bound::runBranchAndBound(op);
+          branch_and_bound::runBranchAndBound();
         } else if (tableOption == 4) {
           std::cout << "Criando tabela Las Vegas (limite de "
                     << las_vegas::tableTimeLimit.count()
                     << " segundos por instancia)...\n";
-          las_vegas::runLasVegas(op);
+          las_vegas::runLasVegas();
         } else {
           std::cout << "Criando tabela Simulated Annealing...\n";
-          simulated_annealing::runSA(op);
+          simulated_annealing::runSA();
         }
         std::cout << "Tabela salva em data/output/.\n";
         return 0;

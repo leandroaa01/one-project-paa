@@ -40,11 +40,8 @@ inline std::size_t run(const Instance& instance, unsigned int& seed) {
     return strategy.size();
 }
 
-inline void runSA(const std::string& use) {
-    const bool staticCapacity = use == "s" || use == "sim";
-    const std::string fileStem = staticCapacity
-                                     ? "data/output/resultados_SimulatedAnnealing_176"
-                                     : "data/output/resultados_SimulatedAnnealing";
+inline void runSA() {
+    const std::string fileStem = "data/output/resultados_SimulatedAnnealing";
     std::string fileName = fileStem + ".csv";
     for (std::size_t runNumber = 2; std::filesystem::exists(fileName); ++runNumber) {
         fileName = fileStem + "-" + std::to_string(runNumber) + ".csv";
@@ -59,7 +56,7 @@ inline void runSA(const std::string& use) {
               "simulated_annealing,semente,excesso\n";
 
     for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
-        const auto instances = Reader::readInstances(path, staticCapacity);
+        const auto instances = Reader::readInstances(path);
         if (instances.empty()) {
             throw std::runtime_error("Dataset vazio ou indisponivel: " + std::string(path));
         }

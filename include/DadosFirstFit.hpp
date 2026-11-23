@@ -32,14 +32,8 @@ std::size_t run(const Instance& instance) {
     return strategy.size();
 }
 
-void runFirst(std::string use) {
-    bool ss {false};
-    std::string fileName{"data/output/resultados_FirstFit.csv"};
-    if(use == "s" or use =="sim" ) {
-        ss = true; 
-        fileName = "data/output/resultados_FirstFit_176.csv";
-    }
-
+void runFirst() {
+    const std::string fileName{"data/output/resultados_FirstFit.csv"};
     std::ofstream output(fileName);
 if (!output) {
     throw std::runtime_error("Nao foi possivel abrir a saida");
@@ -49,7 +43,7 @@ output << "arquivo,instancia,itens,capacidade,minimo_de_bins,"
           "first_fit,ffd_repack,excesso_ff,excesso_ffd_repack\n";
 
 for (const auto* path : {"data/binpack1.txt", "data/binpack2.txt"}) {
-    auto instances = Reader::readInstances(path, ss);
+    auto instances = Reader::readInstances(path);
 
     if (instances.empty()) {
         throw std::runtime_error("Dataset vazio ou indisponivel");

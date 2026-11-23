@@ -46,10 +46,7 @@ O menu de tabelas oferece:
 3. Branch-and-Bound.
 4. Las Vegas.
 
-Ao escolher uma tabela, o programa pergunta se deve usar capacidade estatica de 176 ou a capacidade registrada em cada instancia:
-
-- digite `s` ou `sim` para usar capacidade estatica;
-- digite `n` ou outro valor para usar a capacidade original das instancias.
+As tabelas usam a capacidade registrada em cada instancia.
 
 Os CSV sao escritos em `data/output/`. Os nomes evitam sobrescrever execucoes anteriores quando o mesmo tipo de tabela ja existe.
 

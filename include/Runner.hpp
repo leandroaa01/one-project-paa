@@ -84,7 +84,8 @@ public:
                     totalItens+= item;
                 }
 
-                std::cout << "\nTotal de todos os item "<< totalItens << " e " << totalItens / 176 ;
+                std::cout << "\nTotal de todos os item " << totalItens
+                          << " e limite inferior por volume " << totalItens / inst.binCapacity;
                
 
                 std::cout << "\n";

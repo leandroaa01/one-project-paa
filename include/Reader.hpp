@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -17,7 +16,7 @@ struct Instance {
 
 class Reader {
 public:
-    static std::vector<Instance> readInstances(const std::string& filepath, bool scaticSize = false) {
+    static std::vector<Instance> readInstances(const std::string& filepath) {
         std::vector<Instance> instances;
         std::ifstream file(filepath);
 
@@ -37,19 +36,9 @@ public:
             
             file >> inst.id;
             file >> inst.binCapacity >> inst.numItems >> inst.bestKnown;
-            auto total = 0;
             inst.items.resize(inst.numItems);
             for (int i = 0; i < inst.numItems; ++i) {
                 file >> inst.items[i];
-                total+= inst.items[i];
-            }
-            // para o calculo estatico
-            if(scaticSize){
-            auto static_value{176};
-            inst.binCapacity = static_value;
-            inst.bestKnown = static_cast<int>(
-    std::ceil(static_cast<double>(total) / static_value)
-);
             }
             instances.push_back(inst);
         }
