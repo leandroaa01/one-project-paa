@@ -32,6 +32,9 @@ USO DOS MENUS
    2 - First Fit Decreasing com remanejamento
    3 - Best Fit
    4 - Best Fit Decreasing com remanejamento
+   5 - Branch-and-Bound
+   6 - Las Vegas
+   7 - Simulated Annealing
    0 - voltar ao menu principal
 
 3. Para cada instância, escolha uma opção:
@@ -49,3 +52,12 @@ cada instância e são gravadas em data/output/.
 
 A geração das tabelas processa os dois conjuntos de instâncias e encerra
 o programa ao terminar.
+
+No menu de tabelas, a opção 5 gera a tabela com a temperatura padrão, a 6
+calibra a temperatura e a 7 gera a tabela com um T0 escolhido pelo usuário
+(entre 0,05 e 8,0). Informe uma semente base para tornar
+as execuções reproduzíveis: Enter usa a semente fixa 20261123, "a" sorteia
+uma nova e um número define uma semente específica. A semente usada aparece
+na tela e no CSV. A calibração testa 10 temperaturas iniciais,
+com 3 repetições em cada uma das 40 instâncias, e salva os resultados
+detalhados e o resumo em CSV dentro de data/output/.

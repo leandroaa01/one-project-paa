@@ -1,4 +1,9 @@
+#include <algorithm>
+#include <cstdint>
+#include <cmath>
 #include <iostream>
+#include <limits>
+#include <stdexcept>
 #include <string>
 
 #include "DadosBestFit.hpp"
@@ -65,16 +70,45 @@ Qual tabela deseja gerar?
  3 - Branch-and-Bound
  4 - Las Vegas (busca exata aleatorizada)
  5 - Simulated Annealing
+  6 - Calibrar temperatura do Simulated Annealing
+ 7 - Simulated Annealing com T0 personalizado
  0 - Voltar
 Escolha: )";
         int tableOption;
         if (!(std::cin >> tableOption)) return 0;
         if (tableOption == 0) continue;
-        if (tableOption < 1 || tableOption > 5) {
+        if (tableOption < 1 || tableOption > 7) {
           std::cout << "Opcao de tabela invalida!\n";
           continue;
         }
 
+        std::uint32_t seedBase = simulated_annealing::defaultSeedBase;
+        if (tableOption >= 5) {
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+          std::cout << "Semente base [Enter=" << seedBase
+                    << ", a=aleatoria, ou digite outra]: ";
+          std::string seedInput;
+          std::getline(std::cin, seedInput);
+          if (seedInput == "a" || seedInput == "A" || seedInput == "aleatoria" ||
+              seedInput == "aleatória") {
+            seedBase = simulated_annealing::randomSeedBase();
+          } else if (!seedInput.empty()) {
+            try {
+              std::size_t consumed = 0;
+              const auto parsed = std::stoull(seedInput, &consumed);
+              if (consumed != seedInput.size() ||
+                  parsed > std::numeric_limits<std::uint32_t>::max()) {
+                throw std::out_of_range("seed fora do intervalo");
+              }
+              seedBase = static_cast<std::uint32_t>(parsed);
+            } catch (const std::exception&) {
+              std::cerr << "Semente invalida; informe um inteiro entre 0 e "
+                        << std::numeric_limits<std::uint32_t>::max() << ".\n";
+              return 1;
+            }
+          }
+          std::cout << "Semente base usada: " << seedBase << '\n';
+        }
         if (tableOption == 1) {
           std::cout << "Criando tabela de Best-Fit...\n";
           best::runBest();
@@ -89,9 +123,34 @@ Escolha: )";
                     << las_vegas::tableTimeLimit.count()
                     << " segundos por instancia)...\n";
           las_vegas::runLasVegas();
-        } else {
+        } else if (tableOption == 5) {
           std::cout << "Criando tabela Simulated Annealing...\n";
-          simulated_annealing::runSA();
+          simulated_annealing::runSA(seedBase);
+        } else if (tableOption == 6) {
+          std::cout << "Executando calibracao de temperatura (10 temperaturas, 3 repeticoes por instancia)...\n";
+          simulated_annealing::runTemperatureCalibration(seedBase);
+        } else {
+          std::cout << "Temperatura inicial T0 personalizada [0.05 a 8.0]: ";
+          std::string temperatureInput;
+          std::getline(std::cin, temperatureInput);
+          std::replace(temperatureInput.begin(), temperatureInput.end(), ',', '.');
+          try {
+            std::size_t consumed = 0;
+            const double initialTemperature = std::stod(temperatureInput, &consumed);
+            if (consumed != temperatureInput.size() ||
+                !std::isfinite(initialTemperature) || initialTemperature < 0.05 ||
+                initialTemperature > 8.0) {
+              throw std::out_of_range("temperatura fora do intervalo");
+            }
+            const auto parameters =
+                simulated_annealing::parametersForInitialTemperature(initialTemperature);
+            std::cout << "Criando tabela Simulated Annealing com T0="
+                      << initialTemperature << "...\n";
+            simulated_annealing::runSA(seedBase, parameters);
+          } catch (const std::exception&) {
+            std::cerr << "Temperatura invalida; informe um valor entre 0.05 e 8.0.\n";
+            return 1;
+          }
         }
         std::cout << "Tabela salva em data/output/.\n";
         return 0;

@@ -24,6 +24,13 @@
 
 #include "BestFit.hpp"
 
+struct SimulatedAnnealingParameters {
+    double initialTemperature = 0.3;
+    double minimumTemperature = 0.003;
+    std::size_t temperatureLevels = 30;
+    std::size_t minimumIterationsPerTemperature = 50;
+};
+
 /**
  * @class SimulatedAnnealing
  * @brief Implementa o algoritmo de Simulated Annealing para o problema de bin packing.
@@ -35,15 +42,11 @@
  */
 class SimulatedAnnealing {
 private:
-    static constexpr double initialTemperature = 3.0; // <! Valor inicial da temperatura, ajustado para o tamanho do problema.
-    static constexpr double minimumTemperature = 1.0; // <! Valor mínimo da temperatura, ajustado para o tamanho do problema.
-    static constexpr double coolingRate = 0.95; // <! Taxa de resfriamento, ajustada para o tamanho do problema.
-    static constexpr std::size_t minimumIterationsPerTemperature = 50; // <! Número mínimo de iterações por temperatura, ajustado para o tamanho do problema.
-
     std::vector<Bin> bins; // <! Vetor de bins utilizados na solução atual.
     int binCapacity; // <! Capacidade máxima de cada bin.
     unsigned int seed; // <! Semente para o gerador de números aleatórios.
     std::mt19937 generator; // <! Gerador de números aleatórios.
+    SimulatedAnnealingParameters parameters;
 
     /**
      * @brief Decodifica uma permutação de índices em uma solução de bins.
@@ -71,10 +74,20 @@ public:
      * com uma semente baseada em um dispositivo aleatório. Lança uma exceção se a capacidade
      * do bin for menor ou igual a zero.
      */
-    explicit SimulatedAnnealing(int binCapacity)
-        : binCapacity(binCapacity), seed(std::random_device{}()), generator(seed) {
+    explicit SimulatedAnnealing(
+        int binCapacity,
+        SimulatedAnnealingParameters parameters = {})
+        : binCapacity(binCapacity), seed(std::random_device{}()), generator(seed),
+          parameters(parameters) {
         if (binCapacity <= 0) {
             throw std::invalid_argument("A capacidade do bin deve ser positiva");
+        }
+        if (!std::isfinite(parameters.initialTemperature) ||
+            !std::isfinite(parameters.minimumTemperature) ||
+            parameters.initialTemperature <= parameters.minimumTemperature ||
+            parameters.minimumTemperature <= 0.0 || parameters.temperatureLevels == 0 ||
+            parameters.minimumIterationsPerTemperature == 0) {
+            throw std::invalid_argument("Parametros de temperatura invalidos");
         }
     }
 
@@ -140,9 +153,14 @@ public:
             // Distribuição uniforme para decidir se uma solução pior será aceita com base na temperatura atual.
             std::uniform_real_distribution<double> probability(0.0, 1.0);
             // Calcula o número de iterações por temperatura, garantindo um mínimo definido.
-            const std::size_t iterationsPerTemperature = std::max(minimumIterationsPerTemperature, items.size());
+            const std::size_t iterationsPerTemperature =
+                std::max(parameters.minimumIterationsPerTemperature, items.size());
+            const double coolingRate = std::pow(
+                parameters.minimumTemperature / parameters.initialTemperature,
+                1.0 / static_cast<double>(parameters.temperatureLevels));
+            double temperature = parameters.initialTemperature;
 
-            for (double temperature = initialTemperature; temperature > minimumTemperature; temperature *= coolingRate) {
+            for (std::size_t level = 0; level < parameters.temperatureLevels; ++level) {
                 for (std::size_t iteration = 0; iteration < iterationsPerTemperature; ++iteration) {
                     std::vector<std::size_t> neighborPermutation = currentPermutation; // Cria uma cópia da permutação atual para gerar um vizinho.
                     std::size_t first = position(generator); // Seleciona aleatoriamente o primeiro índice para troca.
@@ -173,6 +191,7 @@ public:
                         }
                     }
                 }
+                temperature *= coolingRate;
             }
         }
         // Atualiza os bins com a melhor solução encontrada após o processo de Simulated Annealing.
